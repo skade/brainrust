@@ -73,6 +73,7 @@ impl Machine {
                 Some(c) => print!("{}", c),
                 _ => ()
             },
+            //TODO: actual IO input
             Instruction::Input => self.mem[self.m] = 0,
             Instruction::JumpForwardIfZero => if self.mem[self.m] == 0 {
                 let mut n = 1;
