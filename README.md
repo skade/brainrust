@@ -1,0 +1,10 @@
+# brainrust
+A brainf*** interpreter in Rust, written an exercise
+
+## How to run
+
+You'll need [Rust](http://www.rust-lang.org) and [Cargo](http://doc.crates.io), both already come with the standard Rust installer.
+
+1. clone this repository
+1. change into its directory
+1. execute `cargo run`
