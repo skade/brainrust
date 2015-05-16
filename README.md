@@ -1,6 +1,8 @@
 # brainrust
 A brainf*** interpreter in Rust, written an exercise
 
+The actual code is in [src/main.rs](src/main.rs).
+
 ## How to run
 
 You'll need [Rust](http://www.rust-lang.org) and [Cargo](http://doc.crates.io), both already come with the standard Rust installer.
