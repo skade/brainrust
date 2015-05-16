@@ -1,5 +1,5 @@
 # brainrust
-A brainf*** interpreter in Rust, written an exercise
+A brainf*** interpreter in Rust, written as an exercise
 
 The actual code is in [src/main.rs](src/main.rs).
 
