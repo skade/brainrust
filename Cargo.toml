@@ -2,3 +2,6 @@
 name = "brainrust"
 version = "0.1.0"
 authors = ["Leon Weidauer <leon@lnwdr.de>"]
+
+[dependencies]
+ncurses = "5.73.0"

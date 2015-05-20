@@ -1,4 +1,10 @@
+extern crate ncurses;
+
+use std::env;
 use std::char;
+use std::io::prelude::*;
+use std::fs::File;
+use ncurses::*;
 
 #[derive(Debug)]
 enum Instruction {
@@ -70,11 +76,14 @@ impl Machine {
             Instruction::Increment => self.mem[self.m] += 1,
             Instruction::Decrement => self.mem[self.m] -=  1,
             Instruction::Output => match char::from_u32(self.mem[self.m]) {
-                Some(c) => print!("{}", c),
+                Some(c) => {
+                    printw(&format!("{}", c));
+                    refresh();
+                },
                 _ => ()
             },
             //TODO: actual IO input
-            Instruction::Input => self.mem[self.m] = 0,
+            Instruction::Input => self.mem[self.m] = getch() as u32,
             Instruction::JumpForwardIfZero => if self.mem[self.m] == 0 {
                 let mut n = 1;
                 while n > 0 {
@@ -127,16 +136,48 @@ impl Machine {
     }
 }
 
-
-fn main() {
-    let input = "++++++++[>++++[>++>+++>+++>+<<<<-]>+>+>->>+[<]<-]>>.>---.+++++++..+++.>>.<-.<.+++.------.--------.>>+.>++."; //hello world
-    //let input = "+++]"; //SyntaxError
-    //let input = "<"; //AddressBelowZero
+fn run_code(code:String) -> () {
+    initscr();
+    cbreak();
+    keypad(stdscr, true);
+    noecho();
 
     let mut machine = Machine::new();
-    machine.parse(input.to_string());
+    machine.parse(code);
     match machine.run() {
-        Err(e) => println!("{:?}", e),
+        Err(e) => {
+            printw(&format!("{:?}", e));
+            refresh();
+        },
         _ => ()
+    }
+
+    printw("\n\n---\nProgram terminated.\nPress any key to quit.");
+    refresh();
+    getch();
+    endwin();
+}
+
+fn load_source(filename:String) -> Result<String, ()> {
+    match File::open(filename) {
+        Ok(mut f) => {
+            let mut code = String::new();
+            match f.read_to_string(&mut code) {
+                Ok(_) => Ok(code),
+                _ => Err(())
+            }
+        },
+        _ => Err(())
+    }
+}
+
+
+fn main() {
+    match env::args().nth(1) {
+        Some(filename) => match load_source(filename) {
+            Ok(code) => run_code(code),
+            _ => {println!("Can't read input file.");}
+        },
+        _ => println!("Source file argument missing")
     }
 }
