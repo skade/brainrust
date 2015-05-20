@@ -11,4 +11,4 @@ Also, libncurses needs to be installed on your system since brainrust uses [rs-n
 
 1. clone this repository
 1. change into its directory
-1. execute `cargo run`
+1. execute `cargo run examples/hello_world.bf`
