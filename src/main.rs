@@ -127,11 +127,7 @@ impl Machine {
                 return Ok(());
             }
 
-            let result = self.step();
-            match result {
-                Err(e) => return Err(e),
-                _ => ()
-            }
+            try!(self.step());
         }
     }
 }
