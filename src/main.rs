@@ -144,12 +144,9 @@ fn run_code(code:String) -> () {
 
     let mut machine = Machine::new();
     machine.parse(code);
-    match machine.run() {
-        Err(e) => {
-            printw(&format!("{:?}", e));
-            refresh();
-        },
-        _ => ()
+    if let Err(e) = machine.run() {
+        printw(&format!("{:?}", e));
+        refresh();
     }
 
     printw("\n\n---\nProgram terminated.\nPress any key to quit.");
@@ -173,11 +170,13 @@ fn load_source(filename:String) -> Result<String, ()> {
 
 
 fn main() {
-    match env::args().nth(1) {
-        Some(filename) => match load_source(filename) {
-            Ok(code) => run_code(code),
-            _ => {println!("Can't read input file.");}
-        },
-        _ => println!("Source file argument missing")
+    if let Some(filename) = env::args().nth(1) {
+        if let Ok(code) = load_source(filename) {
+            run_code(code)
+        } else {
+            println!("Can't read input file.")
+        }
+    } else {
+        println!("Source file argument missing")
     }
 }
